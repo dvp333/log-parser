@@ -7,9 +7,25 @@ import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
-public class ExecuteQueryTasklet implements Tasklet, StepExecutionListener {
+import br.com.log.batch.repository.AccessLogRepository;
 
+public class SearchAccessLogTasklet implements Tasklet, StepExecutionListener {
+
+	@Value("${startDate}")
+	private String startDate;
+	
+	@Value("${duration}")
+	private String duration;
+	
+	@Value("${threshold}")
+	private int threshold;
+	
+	@Autowired
+	private AccessLogRepository LogRepository;
+	
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
 		// TODO Auto-generated method stub
@@ -19,7 +35,7 @@ public class ExecuteQueryTasklet implements Tasklet, StepExecutionListener {
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
 		// TODO Auto-generated method stub
-		return null;
+		return RepeatStatus.FINISHED;
 	}
 	
 	@Override

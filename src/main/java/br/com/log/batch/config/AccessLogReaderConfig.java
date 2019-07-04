@@ -9,29 +9,16 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.log.batch.model.LogLine;
-import br.com.log.batch.step.chunk.LogLineReader;
-import br.com.log.batch.step.chunk.LogLineWriter;
-import br.com.log.batch.step.tasklet.ExecuteQueryTasklet;
+import br.com.log.batch.model.AccessLog;
+import br.com.log.batch.step.chunk.AccessLogReader;
+import br.com.log.batch.step.chunk.AccessLogLineWriter;
+import br.com.log.batch.step.tasklet.SearchAccessLogTasklet;
 
 @Configuration
-public class LogReaderConfig {
-
-	@Value("${startDate}")
-	private String startDate;
-	
-	@Value("${duration}")
-	private String duration;
-	
-	@Value("${threshold}")
-	private int threshold;
-	
-	@Value("${logPath}")
-	private String logPath;
+public class AccessLogReaderConfig {
 	
 	@Autowired
 	private JobBuilderFactory jobBuilder;
@@ -41,16 +28,16 @@ public class LogReaderConfig {
 	
 	@Bean
 	public Job readLogJob() {
-		return this.jobBuilder.get("readLogJob")
-			                  .start(processLines(logLineReader(), logLineWriter())).on(ExitStatus.COMPLETED.getExitCode())
+		return this.jobBuilder.get("readAccessLogJob")
+			                  .start(processAccessLog(logLineReader(), logLineWriter())).on(ExitStatus.COMPLETED.getExitCode())
 			                  .to(executeQuery()).end()
 			                  .build();
 	}
 	
 	@Bean
-    protected Step processLines(ItemReader<LogLine> reader,  ItemWriter<LogLine> writer) {
+    protected Step processAccessLog(ItemReader<AccessLog> reader,  ItemWriter<AccessLog> writer) {
         return stepBuilderFactory.get("processLines")
-			        			 .<LogLine, LogLine> chunk(5)
+			        			 .<AccessLog, AccessLog> chunk(1000)
 					             .reader(reader)
 					             .writer(writer)
 					             .build();
@@ -58,24 +45,24 @@ public class LogReaderConfig {
 	
 	@Bean
     public Step executeQuery() {
-    	return stepBuilderFactory.get("executeQueryStep")
+    	return stepBuilderFactory.get("searchAccessLogStep")
 								 .tasklet(getExecuteQueryTasklet())
 								 .build();
     }
 	
     @Bean
-    public ItemReader<LogLine> logLineReader() {
-    	return new LogLineReader();
+    public ItemReader<AccessLog> logLineReader() {
+    	return new AccessLogReader();
     }
     
     @Bean
-    public ItemWriter<LogLine> logLineWriter() {
-    	return new LogLineWriter();
+    public ItemWriter<AccessLog> logLineWriter() {
+    	return new AccessLogLineWriter();
     }
     
     @Bean
     public Tasklet getExecuteQueryTasklet() {
-    	return new ExecuteQueryTasklet();
+    	return new SearchAccessLogTasklet();
     }
 	
 }
