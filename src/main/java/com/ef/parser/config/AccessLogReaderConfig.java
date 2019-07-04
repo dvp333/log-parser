@@ -1,4 +1,4 @@
-package br.com.log.batch.config;
+package com.ef.parser.config;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.log.batch.model.AccessLog;
-import br.com.log.batch.step.chunk.AccessLogReader;
-import br.com.log.batch.step.chunk.AccessLogLineWriter;
-import br.com.log.batch.step.tasklet.SearchAccessLogTasklet;
+import com.ef.parser.model.AccessLog;
+import com.ef.parser.step.chunk.AccessLogWriter;
+import com.ef.parser.step.chunk.AccessLogReader;
+import com.ef.parser.step.tasklet.SearchAccessLogTasklet;
+import com.ef.parser.step.tasklet.ValidadeArgumentsTasklet;
 
 @Configuration
 public class AccessLogReaderConfig {
@@ -29,14 +30,17 @@ public class AccessLogReaderConfig {
 	@Bean
 	public Job readLogJob() {
 		return this.jobBuilder.get("readAccessLogJob")
-			                  .start(processAccessLog(logLineReader(), logLineWriter())).on(ExitStatus.COMPLETED.getExitCode())
-			                  .to(executeQuery()).end()
+							  .start(validateArguments()).on(ExitStatus.FAILED.getExitCode()).end()
+							  .from(validateArguments()).on(ExitStatus.COMPLETED.getExitCode())
+			                  .to(processAccessLog(logLineReader(), logLineWriter())).on(ExitStatus.COMPLETED.getExitCode())
+			                  .to(searchAccessLog())
+			                  .end()
 			                  .build();
 	}
 	
 	@Bean
     protected Step processAccessLog(ItemReader<AccessLog> reader,  ItemWriter<AccessLog> writer) {
-        return stepBuilderFactory.get("processLines")
+        return stepBuilderFactory.get("processAccessLogStep")
 			        			 .<AccessLog, AccessLog> chunk(1000)
 					             .reader(reader)
 					             .writer(writer)
@@ -44,9 +48,16 @@ public class AccessLogReaderConfig {
     }
 	
 	@Bean
-    public Step executeQuery() {
+    public Step searchAccessLog() {
     	return stepBuilderFactory.get("searchAccessLogStep")
 								 .tasklet(getExecuteQueryTasklet())
+								 .build();
+    }
+	
+	@Bean
+    public Step validateArguments() {
+    	return stepBuilderFactory.get("validateArgumentsStep")
+								 .tasklet(getValidadeArgumentsTasklet())
 								 .build();
     }
 	
@@ -57,12 +68,17 @@ public class AccessLogReaderConfig {
     
     @Bean
     public ItemWriter<AccessLog> logLineWriter() {
-    	return new AccessLogLineWriter();
+    	return new AccessLogWriter();
     }
     
     @Bean
     public Tasklet getExecuteQueryTasklet() {
     	return new SearchAccessLogTasklet();
+    }
+    
+    @Bean
+    public Tasklet getValidadeArgumentsTasklet() {
+    	return new ValidadeArgumentsTasklet();
     }
 	
 }

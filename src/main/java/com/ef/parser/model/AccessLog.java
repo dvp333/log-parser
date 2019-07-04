@@ -1,4 +1,4 @@
-package br.com.log.batch.model;
+package com.ef.parser.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

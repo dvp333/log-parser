@@ -1,4 +1,4 @@
-package br.com.log.batch.step.tasklet;
+package com.ef.parser.step.tasklet;
 
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.StepContribution;
@@ -10,7 +10,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import br.com.log.batch.repository.AccessLogRepository;
+import com.ef.parser.repository.AccessLogRepository;
 
 public class SearchAccessLogTasklet implements Tasklet, StepExecutionListener {
 

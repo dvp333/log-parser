@@ -1,4 +1,4 @@
-package br.com.log.batch.step.chunk;
+package com.ef.parser.step.chunk;
 
 import java.util.List;
 
@@ -7,19 +7,19 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.log.batch.model.AccessLog;
-import br.com.log.batch.repository.AccessLogRepository;
+import com.ef.parser.model.AccessLog;
+import com.ef.parser.repository.AccessLogRepository;
 
-public class AccessLogLineWriter implements ItemWriter<AccessLog> {
+public class AccessLogWriter implements ItemWriter<AccessLog> {
 
-	private static final Log logger = LogFactory.getLog("log.reader");
+	private static final Log logger = LogFactory.getLog(AccessLogWriter.class);
 	
 	@Autowired
 	private AccessLogRepository repo;
 	
 	@Override
 	public void write(List<? extends AccessLog> items) throws Exception {
-		logger.info("Saving to database " + items.size() + " items");
+		logger.info(String.format("Saving to database %s items", items.size()));
 		items.stream().forEach(item -> repo.save(item));
 	}
 

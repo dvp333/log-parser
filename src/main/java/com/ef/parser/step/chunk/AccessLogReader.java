@@ -1,4 +1,4 @@
-package br.com.log.batch.step.chunk;
+package com.ef.parser.step.chunk;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,25 +21,25 @@ import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.NonTransientResourceException;
 import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import br.com.log.batch.model.AccessLog;
+import com.ef.parser.Arguments;
+import com.ef.parser.model.AccessLog;
 
 public class AccessLogReader implements ItemReader<AccessLog>, StepExecutionListener {
 
-	private static final Log logger = LogFactory.getLog("log.reader");
+	private static final Log logger = LogFactory.getLog(AccessLogReader.class);
 	
-	@Value("${logPath}")
-	private String logPath;
+	@Autowired
+	private Arguments arguments;
 	private BufferedReader reader;
 	private static DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 	private Instant start;
 	
 	@Override
 	public void beforeStep(StepExecution stepExecution) {
-		
         logger.debug("Log Reader initialized.");
-        File file = new File(logPath);
+        File file = new File(arguments.getLogPath());
         InputStream inputStream;
 		try {
 			inputStream = new FileInputStream(file);
@@ -47,7 +47,7 @@ public class AccessLogReader implements ItemReader<AccessLog>, StepExecutionList
 			start = Instant.now();
 		} catch (FileNotFoundException e) {
 			logger.error(e);
-			throw new RuntimeException(String.format("File not found: ", logPath));
+			throw new RuntimeException(String.format("File not found: ", arguments.getLogPath()));
 		}
 	}
 	

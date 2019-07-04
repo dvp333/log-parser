@@ -6,3 +6,6 @@ spring:
     username: sa
     password: password
     driver-class-name: org.h2.Driver
+startDate: 
+duration: 
+threshold: 0

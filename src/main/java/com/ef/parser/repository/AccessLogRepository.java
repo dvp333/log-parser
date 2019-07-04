@@ -1,8 +1,8 @@
-package br.com.log.batch.repository;
+package com.ef.parser.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import br.com.log.batch.model.AccessLog;
+import com.ef.parser.model.AccessLog;
 
 public interface AccessLogRepository extends JpaRepository<AccessLog, Long> {
 

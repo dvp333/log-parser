@@ -1,4 +1,4 @@
-package br.com.log.batch;
+package com.ef.parser;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
