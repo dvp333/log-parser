@@ -9,9 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 @SpringBootApplication
 public class LogReaderApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(LogReaderApplication.class, args);
 	}
-
 }

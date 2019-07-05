@@ -1,18 +1,19 @@
 package com.ef.parser;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.ef.parser.validation.ValidDateTimePattern;
+import com.ef.parser.validation.ValidThreshold;
+
 @Component
 public class Arguments {
 
 	@Value("${startDate}")
-	@NotEmpty(message="The argument startDate is mandatory.")
+	@ValidDateTimePattern
 	private String startDate;
 	
 	@Value("${duration}")
@@ -20,8 +21,8 @@ public class Arguments {
 	private String duration;
 	
 	@Value("${threshold}")
-	@Positive(message="Threshold must be a positive number.")
-	private int threshold;
+	@ValidThreshold
+	private Integer threshold;
 	
 	@Value("${logPath}")
 	private String logPath;

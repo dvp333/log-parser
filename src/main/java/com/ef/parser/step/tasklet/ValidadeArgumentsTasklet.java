@@ -23,8 +23,7 @@ import com.ef.parser.Arguments;
 public class ValidadeArgumentsTasklet implements Tasklet, StepExecutionListener {
 
 	private static final Log logger = LogFactory.getLog(ValidadeArgumentsTasklet.class);
-	private static final int MAX_DAILY_THRESHOLD = 500;
-	private static final int MAX_HOURLY_THRESHOLD = 300;
+	
 	
 	@Autowired
 	private Arguments arguments;
@@ -40,19 +39,7 @@ public class ValidadeArgumentsTasklet implements Tasklet, StepExecutionListener 
 	
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		violations = validator.validate(arguments);
-		// validate startData
-		// validate threshold accordingly with duration 
-		if(violations.isEmpty()) {
-			boolean validDuration = arguments.getDuration().equals("daily")
-										? arguments.getThreshold() <= MAX_DAILY_THRESHOLD
-										: arguments.getThreshold() <= MAX_HOURLY_THRESHOLD;
-			
-			//CONTINUE HERE
-			
-		} else {
-			violations.stream().forEach(violation -> logger.error(violation.getMessage()));
-		}
+		(violations = validator.validate(arguments)).stream().forEach(violation -> logger.error(violation.getMessage()));
 		return RepeatStatus.FINISHED;
 	}
 
