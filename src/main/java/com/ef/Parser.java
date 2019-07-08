@@ -1,4 +1,4 @@
-package com.ef.parser;
+package com.ef;
 
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableBatchProcessing
 @EnableJpaRepositories
 @SpringBootApplication
-public class LogReaderApplication {
+public class Parser {
 	public static void main(String[] args) {
-		SpringApplication.run(LogReaderApplication.class, args);
+		SpringApplication.run(Parser.class, args);
 	}
 }

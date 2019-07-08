@@ -18,7 +18,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.ef.parser.Arguments;
+import com.ef.Arguments;
 
 public class ValidadeArgumentsTasklet implements Tasklet, StepExecutionListener {
 

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ef.parser.Arguments;
+import com.ef.Arguments;
 import com.ef.parser.repository.AccessLogRepository;
 import com.ef.parser.validation.DatePatternValidator;
 

@@ -1,4 +1,4 @@
-package com.ef.parser;
+package com.ef;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
