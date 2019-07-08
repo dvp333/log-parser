@@ -1,47 +1,27 @@
 package com.ef.parser.step.tasklet;
 
-import org.springframework.batch.core.ExitStatus;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.batch.core.StepContribution;
-import org.springframework.batch.core.StepExecution;
-import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
-import com.ef.parser.repository.AccessLogRepository;
+import com.ef.parser.service.AccessLogService;
 
-public class SearchAccessLogTasklet implements Tasklet, StepExecutionListener {
-
-	@Value("${startDate}")
-	private String startDate;
+public class SearchAccessLogTasklet implements Tasklet {
 	
-	@Value("${duration}")
-	private String duration;
-	
-	@Value("${threshold}")
-	private int threshold;
+	private static final Log logger = LogFactory.getLog(AccessLogService.class);
 	
 	@Autowired
-	private AccessLogRepository LogRepository;
+	private AccessLogService service;
 	
-	@Override
-	public void beforeStep(StepExecution stepExecution) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	@Override
 	public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-		// TODO Auto-generated method stub
+		logger.info("========== Found IPs ==========");
+		service.findAccessLogs().stream().forEach(ip -> logger.info(ip));
 		return RepeatStatus.FINISHED;
-	}
-	
-	@Override
-	public ExitStatus afterStep(StepExecution stepExecution) {
-		// TODO Auto-generated method stub
-		return ExitStatus.COMPLETED;
 	}
 
 }

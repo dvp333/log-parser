@@ -1,19 +1,19 @@
 package com.ef.parser;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.ef.parser.validation.ValidDateTimePattern;
-import com.ef.parser.validation.ValidThreshold;
+import com.ef.parser.validation.DatePattern;
 
 @Component
 public class Arguments {
 
 	@Value("${startDate}")
-	@ValidDateTimePattern
+	@DatePattern(message="Invalid startDate format. Must be yyyy-MM-dd.HH:mm:ss.")
 	private String startDate;
 	
 	@Value("${duration}")
@@ -21,10 +21,11 @@ public class Arguments {
 	private String duration;
 	
 	@Value("${threshold}")
-	@ValidThreshold
+	@Positive(message="Invalid threshold value. Must be a positive number")
 	private Integer threshold;
 	
 	@Value("${logPath}")
+	@NotEmpty(message="The logpath argument is required")
 	private String logPath;
 
 	public String getStartDate() {

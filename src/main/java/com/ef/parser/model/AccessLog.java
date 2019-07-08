@@ -23,7 +23,7 @@ public class AccessLog implements Serializable {
 	private long id;
 	
 	@Column
-	private LocalDateTime date;
+	private LocalDateTime accessDate;
 	
 	@Column
 	private String ip;
@@ -45,12 +45,12 @@ public class AccessLog implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDateTime getDate() {
-		return date;
+	public LocalDateTime getAccessDate() {
+		return accessDate;
 	}
 
-	public void setDate(LocalDateTime date) {
-		this.date = date;
+	public void setAccessDate(LocalDateTime accessDate) {
+		this.accessDate = accessDate;
 	}
 
 	public String getIp() {

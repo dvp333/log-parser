@@ -58,7 +58,7 @@ public class AccessLogReader implements ItemReader<AccessLog>, StepExecutionList
 		if ((line = reader.readLine()) != null) {
 			String[] logLine = line.split("[|]");
 			accessLog = new AccessLog();
-			accessLog.setDate(LocalDateTime.parse(logLine[0], dateFormatter));
+			accessLog.setAccessDate(LocalDateTime.parse(logLine[0], dateFormatter));
 			accessLog.setIp(logLine[1]);
 			accessLog.setRequest(logLine[2]);
 			accessLog.setStatus(logLine[3]);
